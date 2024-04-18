@@ -11,6 +11,7 @@ const FormField = ({
   otherStyles,
   ...props
 }) => {
+
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -24,12 +25,13 @@ const FormField = ({
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
-          secureTextEntry={title === "Password" && !showPassword}
+          secureTextEntry={title === "Password" && !showPassword}   // true: se ve la pass // false: no se ve la pass
           {...props}
         />
 
         {title === "Password" && (
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          // Cuando se toca en el icono del ojo se cambia al contrario showPassword
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}> 
             <Image
               source={!showPassword ? icons.eye : icons.eyeHide}
               className="w-6 h-6"
