@@ -6,21 +6,38 @@ import { images } from '../../constants'
 import { useState } from "react";
 import FormField from '../components/FormField';
 import CustomButton from '../components/CustomButton';
+import { createUser } from '../../lib/appwrite';
 
 
 
 const SignUp = () => {
-
 
   const [isSubmitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     username: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const submit = async () => {
+
+    if (form.username === "" || form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setSubmitting(true);
+    try {
+      const result = await createUser(form.email, form.password, form.username);
+      // setUser(result);
+      // setIsLogged(true);
+
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
 
   };
 
@@ -67,7 +84,7 @@ const SignUp = () => {
           />
 
           <CustomButton
-            title="Sign In"
+            title="Sign Up"
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}
@@ -75,13 +92,13 @@ const SignUp = () => {
 
           <View className="flex justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
-              Don't have an account?
+              Do you have an account?
             </Text>
             <Link
-              href="/sign-up"
+              href="/sign-in"
               className="text-lg font-psemibold text-secondary"
             >
-              Signup
+              SignIn
             </Link>
           </View>
         </View>
