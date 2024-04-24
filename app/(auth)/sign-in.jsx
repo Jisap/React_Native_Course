@@ -6,6 +6,7 @@ import { images } from '../../constants'
 import { useState } from "react";
 import FormField from '../components/FormField';
 import CustomButton from '../components/CustomButton';
+import { signIn } from '../../lib/appwrite';
 
 
 
@@ -19,8 +20,25 @@ const SignIn = () => {
     password: "",
   });
 
-  const submit = async() => {
-    
+  const submit = async () => {
+
+    if (form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setSubmitting(true);
+    try {
+      await signIn(form.email, form.password);
+      // setUser(result);
+      // setIsLogged(true);
+
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
+
   };
 
 
