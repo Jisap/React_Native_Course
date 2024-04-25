@@ -1,18 +1,23 @@
 import { useState } from "react";
+import useAppwrite from "../../lib/useAppwrite.js"
+import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 
-import { EmptyState, SearchInput, Trending } from '../components'
+import { EmptyState, SearchInput, Trending, VideoCard } from '../components'
 
 
 
 const Home = () => {
 
+  const { data: posts, refetch } = useAppwrite(getAllPosts);
+ 
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
-    //await refetch(); // Re call videos
+    await refetch(); // Re call videos
     setRefreshing(false);
   };
 
@@ -21,11 +26,17 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList 
-        data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 },]}
-        //data={[]}
+        data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({item}) => (
-          <Text className="text-3xl text-white">{item.id}</Text>
+        renderItem={({item, idx}) => (
+          <VideoCard
+            key={idx+123}
+            title={item.title}
+            thumbnail={item.thumbnail}
+            video={item.video}
+            creator={item.creator.username}
+            avatar={item.creator.avatar}
+          />
         )}
         ListHeaderComponent={() => (
           <View className="my-6 px-4 space-y-6">
@@ -65,7 +76,7 @@ const Home = () => {
             subtitle="No videos created yet"
           />
         )}
-        refreshControl={
+        refreshControl={ // Se activa cuando tiramos hacia abajo de la pantalla
           <RefreshControl refreshing = { refreshing } onRefresh={onRefresh} />
         }
       />
