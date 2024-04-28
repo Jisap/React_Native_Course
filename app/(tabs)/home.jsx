@@ -11,8 +11,9 @@ import { EmptyState, SearchInput, Trending, VideoCard } from '../components'
 
 const Home = () => {
 
-  const { data: posts, refetch } = useAppwrite(getAllPosts);
- 
+  const { data: posts, refetch } = useAppwrite(getAllPosts);  // Cargamos la data relativa a la colección de videos "post"
+  const { data: latestPosts } = useAppwrite(getLatestPosts);  // Cargamos la data de los últimos 7 posts creados
+
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -30,7 +31,7 @@ const Home = () => {
         keyExtractor={(item) => item.$id}
         renderItem={({item, idx}) => (
           <VideoCard
-            key={idx+123}
+            key={idx+124}
             title={item.title}
             thumbnail={item.thumbnail}
             video={item.video}
@@ -66,12 +67,12 @@ const Home = () => {
                 Latest Videos
               </Text>
 
-              <Trending  posts={[{id:1}, {id:2}, {id:3}] ?? []}/>
+              <Trending posts={latestPosts ?? []} />
             </View>
           </View>
         )}
-        ListEmptyComponent={() => (
-          <EmptyState
+        ListEmptyComponent={() => ( // Se activa cuando no se recibe data
+          <EmptyState 
             title="No Videos Found"
             subtitle="No videos created yet"
           />
