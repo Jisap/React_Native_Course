@@ -5,7 +5,7 @@ import VideoCard from "./VideoCard.jsx"
 import EmptyState from "./EmptyState";
 import Trending from "./Trending";
 import SearchInput from "./SearchInput";
-
+import InfoBox from "./Infobox";
 
 export {
 
@@ -15,5 +15,6 @@ export {
   EmptyState,
   Trending,
   SearchInput,
+  InfoBox,
  
 };
