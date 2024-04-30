@@ -6,13 +6,14 @@ import { images } from '../../constants'
 import { useState } from "react";
 import FormField from '../components/FormField';
 import CustomButton from '../components/CustomButton';
-import { signIn } from '../../lib/appwrite';
+import { signIn, getCurrentUser } from '../../lib/appwrite';
+import { useGlobalContext } from '../../context/GlobalProvider'
 
 
 
 const SignIn = () => {
 
- 
+  const { setUser, setIsLoggedIn } = useGlobalContext();
   const [isSubmitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
@@ -27,12 +28,16 @@ const SignIn = () => {
     }
 
     setSubmitting(true);
-    try {
-      await signIn(form.email, form.password);
-      // setUser(result);
-      // setIsLogged(true);
 
+    try {
+      await signIn(form.email, form.password);    // Logueamos en appwrite
+      const result = await getCurrentUser();      // Obtenemos el usuario logueado
+      setUser(result);                            // Establecemos estado para el user en la aplicación
+      setIsLoggedIn(true);
+
+      Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
+
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {

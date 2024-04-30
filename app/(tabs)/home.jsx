@@ -4,6 +4,7 @@ import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
+import { useGlobalContext } from '../../context/GlobalProvider.jsx'
 
 import { EmptyState, SearchInput, Trending, VideoCard } from '../components'
 
@@ -11,6 +12,7 @@ import { EmptyState, SearchInput, Trending, VideoCard } from '../components'
 
 const Home = () => {
 
+  const { user } = useGlobalContext();
   const { data: posts, refetch } = useAppwrite(getAllPosts);  // Cargamos la data relativa a la colección de videos "post"
   const { data: latestPosts } = useAppwrite(getLatestPosts);  // Cargamos la data de los últimos 7 posts creados
 
@@ -44,10 +46,10 @@ const Home = () => {
             <View className="justify-between items-start flex-row mb-6">
               <View>
                 <Text className="font-pmedium text-sm text-gray-100">
-                  Welcome Back
+                  Welcome Back,
                 </Text>
                 <Text className="text-2xl font-psemibold text-white">
-                  JSM
+                  {user?.username}
                 </Text>
               </View>
 
